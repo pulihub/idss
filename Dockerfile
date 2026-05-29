@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y build-essential \
 COPY idss /idss
 
 # compile gsoap and integrate gsoap files in IDSS src code
-COPY gsoap-2.8 /
+COPY gsoap-2.8 /gsoap-2.8
 RUN <<EOF
 cd /gsoap-2.8
 ./configure
