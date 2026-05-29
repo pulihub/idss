@@ -11,7 +11,7 @@ COPY idss /idss
 # compile gsoap and integrate gsoap files in IDSS src code
 COPY gsoap_2.8 /
 RUN <<EOF
-cd gsoap-2.8
+cd /gsoap-2.8
 ./configure
 make
 make install exec_prefix=/gsoap_bin
