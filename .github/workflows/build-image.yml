@@ -41,6 +41,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v7  
         with:
+          platforms: linux/amd64,linux/arm64
           context: .
           push: false
           tags: ${{ github.actor }}/idss:latest 
