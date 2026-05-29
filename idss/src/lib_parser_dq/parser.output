@@ -1,0 +1,1499 @@
+Terminals unused in grammar
+
+    EOL
+    UNKNOWN
+
+
+Grammar
+
+    0 $accept: entire_clause $end
+
+    1 entire_clause: SELECT SPACE fieldlist SPACE FROM SPACE tablelist whereclause
+
+    2 fieldlist: fieldlistnoagg
+    3          | fieldlistagg
+
+    4 fieldlistnoagg: fieldname
+    5               | fieldlistnoagg COMMA fieldname
+
+    6 fieldlistagg: aggname
+    7             | fieldlistagg COMMA aggname
+
+    8 tablelist: tablename
+    9          | tablelist COMMA tablename
+   10          | tablelist JOIN tablename
+   11          | tablelist JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+
+   12 tablename: NAME
+   13          | NAME ALIAS NAME
+
+   14 fieldname: dottedfieldname
+   15          | dottedfieldname ALIAS NAME
+
+   16 aggname: AGGF
+   17        | AGGF ALIAS NAME
+
+   18 dottedfieldname: NAME
+   19                | NAME DOT NAME
+   20                | ASTERISK
+   21                | NAME DOT ASTERISK
+
+   22 whereclause: ε
+   23            | SEMICOLON
+   24            | SPACE WHERE SPACE conditions
+   25            | SPACE WHERE SPACE conditions SEMICOLON
+
+   26 conditions: conditions SPACE OR SPACE OP conditions CP
+   27           | conditions SPACE AND SPACE OP conditions CP
+   28           | OP conditions CP
+   29           | condition
+
+   30 condition: dottedfieldname completeoperator NUMBER
+   31          | dottedfieldname simpleoperator STRING
+   32          | dottedfieldname simpleoperator BOOL
+   33          | dottedfieldname completeoperator innerqueryagg
+   34          | dottedfieldname inclusionoperator innerquerynoagg
+
+   35 completeoperator: EQ
+   36                 | GT
+   37                 | LT
+   38                 | GTE
+   39                 | LTE
+   40                 | NE
+
+   41 simpleoperator: EQ
+   42               | NE
+
+   43 inclusionoperator: IN
+   44                  | NOT IN
+
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+   47 innerquerywhereclause: ε
+   48                      | SPACE WHERE SPACE innerqueryconditions
+
+   49 innerqueryconditions: innerqueryconditions SPACE OR SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions SPACE AND SPACE OP innerqueryconditions CP
+   51                     | OP innerqueryconditions CP
+   52                     | innerquerycondition
+
+   53 innerquerycondition: dottedfieldname completeoperator NUMBER
+   54                    | dottedfieldname simpleoperator STRING
+   55                    | dottedfieldname simpleoperator BOOL
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    SELECT <svalue> (258) 1 45 46
+    FROM <svalue> (259) 1 45 46
+    WHERE <svalue> (260) 24 25 48
+    NAME <svalue> (261) 12 13 15 17 18 19 21
+    COMMA <svalue> (262) 5 7 9
+    SPACE <svalue> (263) 1 24 25 26 27 45 46 48 49 50
+    ALIAS <svalue> (264) 13 15 17
+    DOT <svalue> (265) 19 21
+    OR <svalue> (266) 26 49
+    AND <svalue> (267) 27 50
+    OP <svalue> (268) 26 27 28 45 46 49 50 51
+    CP <svalue> (269) 26 27 28 45 46 49 50 51
+    EOL (270)
+    SEMICOLON (271) 23 25
+    NUMBER <dvalue> (272) 30 53
+    BOOL <dvalue> (273) 32 55
+    EQ <svalue> (274) 35 41
+    GT <svalue> (275) 36
+    LT <svalue> (276) 37
+    GTE <svalue> (277) 38
+    LTE <svalue> (278) 39
+    NE <svalue> (279) 40 42
+    ASTERISK <svalue> (280) 20 21
+    UNKNOWN (281)
+    STRING <svalue> (282) 31 54
+    JOIN <svalue> (283) 10 11
+    ON <svalue> (284) 11
+    AGGF <svalue> (285) 16 17
+    NOT <svalue> (286) 44
+    IN <svalue> (287) 43 44
+
+
+Nonterminals, with rules where they appear
+
+    $accept (33)
+        on left: 0
+    entire_clause <svalue> (34)
+        on left: 1
+        on right: 0
+    fieldlist <svalue> (35)
+        on left: 2 3
+        on right: 1
+    fieldlistnoagg <svalue> (36)
+        on left: 4 5
+        on right: 2 5
+    fieldlistagg <svalue> (37)
+        on left: 6 7
+        on right: 3 7
+    tablelist <svalue> (38)
+        on left: 8 9 10 11
+        on right: 1 9 10 11 45 46
+    tablename <svalue> (39)
+        on left: 12 13
+        on right: 8 9 10 11
+    fieldname <svalue> (40)
+        on left: 14 15
+        on right: 4 5 45
+    aggname <svalue> (41)
+        on left: 16 17
+        on right: 6 7 46
+    dottedfieldname <svalue> (42)
+        on left: 18 19 20 21
+        on right: 11 14 15 30 31 32 33 34 53 54 55
+    whereclause (43)
+        on left: 22 23 24 25
+        on right: 1
+    conditions <tree> (44)
+        on left: 26 27 28 29
+        on right: 24 25 26 27 28
+    condition <tree> (45)
+        on left: 30 31 32 33 34
+        on right: 29
+    completeoperator <svalue> (46)
+        on left: 35 36 37 38 39 40
+        on right: 11 30 33 53
+    simpleoperator <svalue> (47)
+        on left: 41 42
+        on right: 31 32 54 55
+    inclusionoperator <svalue> (48)
+        on left: 43 44
+        on right: 34
+    innerquerynoagg <svalue> (49)
+        on left: 45
+        on right: 34
+    innerqueryagg <svalue> (50)
+        on left: 46
+        on right: 33
+    innerquerywhereclause <svalue> (51)
+        on left: 47 48
+        on right: 45 46
+    innerqueryconditions <svalue> (52)
+        on left: 49 50 51 52
+        on right: 48 49 50 51
+    innerquerycondition <svalue> (53)
+        on left: 53 54 55
+        on right: 52
+
+
+State 0
+
+    0 $accept: • entire_clause $end
+    1 entire_clause: • SELECT SPACE fieldlist SPACE FROM SPACE tablelist whereclause
+
+    SELECT  shift, and go to state 1
+
+    entire_clause  go to state 2
+
+
+State 1
+
+    1 entire_clause: SELECT • SPACE fieldlist SPACE FROM SPACE tablelist whereclause
+
+    SPACE  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: entire_clause • $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 entire_clause: SELECT SPACE • fieldlist SPACE FROM SPACE tablelist whereclause
+    2 fieldlist: • fieldlistnoagg
+    3          | • fieldlistagg
+    4 fieldlistnoagg: • fieldname
+    5               | • fieldlistnoagg COMMA fieldname
+    6 fieldlistagg: • aggname
+    7             | • fieldlistagg COMMA aggname
+   14 fieldname: • dottedfieldname
+   15          | • dottedfieldname ALIAS NAME
+   16 aggname: • AGGF
+   17        | • AGGF ALIAS NAME
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+
+    NAME      shift, and go to state 5
+    ASTERISK  shift, and go to state 6
+    AGGF      shift, and go to state 7
+
+    fieldlist        go to state 8
+    fieldlistnoagg   go to state 9
+    fieldlistagg     go to state 10
+    fieldname        go to state 11
+    aggname          go to state 12
+    dottedfieldname  go to state 13
+
+
+State 4
+
+    0 $accept: entire_clause $end •
+
+    $default  accept
+
+
+State 5
+
+   18 dottedfieldname: NAME •  [$end, COMMA, SPACE, ALIAS, CP, SEMICOLON, EQ, GT, LT, GTE, LTE, NE, JOIN, NOT, IN]
+   19                | NAME • DOT NAME
+   21                | NAME • DOT ASTERISK
+
+    DOT  shift, and go to state 14
+
+    $default  reduce using rule 18 (dottedfieldname)
+
+
+State 6
+
+   20 dottedfieldname: ASTERISK •
+
+    $default  reduce using rule 20 (dottedfieldname)
+
+
+State 7
+
+   16 aggname: AGGF •  [COMMA, SPACE]
+   17        | AGGF • ALIAS NAME
+
+    ALIAS  shift, and go to state 15
+
+    $default  reduce using rule 16 (aggname)
+
+
+State 8
+
+    1 entire_clause: SELECT SPACE fieldlist • SPACE FROM SPACE tablelist whereclause
+
+    SPACE  shift, and go to state 16
+
+
+State 9
+
+    2 fieldlist: fieldlistnoagg •  [SPACE]
+    5 fieldlistnoagg: fieldlistnoagg • COMMA fieldname
+
+    COMMA  shift, and go to state 17
+
+    $default  reduce using rule 2 (fieldlist)
+
+
+State 10
+
+    3 fieldlist: fieldlistagg •  [SPACE]
+    7 fieldlistagg: fieldlistagg • COMMA aggname
+
+    COMMA  shift, and go to state 18
+
+    $default  reduce using rule 3 (fieldlist)
+
+
+State 11
+
+    4 fieldlistnoagg: fieldname •
+
+    $default  reduce using rule 4 (fieldlistnoagg)
+
+
+State 12
+
+    6 fieldlistagg: aggname •
+
+    $default  reduce using rule 6 (fieldlistagg)
+
+
+State 13
+
+   14 fieldname: dottedfieldname •  [COMMA, SPACE]
+   15          | dottedfieldname • ALIAS NAME
+
+    ALIAS  shift, and go to state 19
+
+    $default  reduce using rule 14 (fieldname)
+
+
+State 14
+
+   19 dottedfieldname: NAME DOT • NAME
+   21                | NAME DOT • ASTERISK
+
+    NAME      shift, and go to state 20
+    ASTERISK  shift, and go to state 21
+
+
+State 15
+
+   17 aggname: AGGF ALIAS • NAME
+
+    NAME  shift, and go to state 22
+
+
+State 16
+
+    1 entire_clause: SELECT SPACE fieldlist SPACE • FROM SPACE tablelist whereclause
+
+    FROM  shift, and go to state 23
+
+
+State 17
+
+    5 fieldlistnoagg: fieldlistnoagg COMMA • fieldname
+   14 fieldname: • dottedfieldname
+   15          | • dottedfieldname ALIAS NAME
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+
+    NAME      shift, and go to state 5
+    ASTERISK  shift, and go to state 6
+
+    fieldname        go to state 24
+    dottedfieldname  go to state 13
+
+
+State 18
+
+    7 fieldlistagg: fieldlistagg COMMA • aggname
+   16 aggname: • AGGF
+   17        | • AGGF ALIAS NAME
+
+    AGGF  shift, and go to state 7
+
+    aggname  go to state 25
+
+
+State 19
+
+   15 fieldname: dottedfieldname ALIAS • NAME
+
+    NAME  shift, and go to state 26
+
+
+State 20
+
+   19 dottedfieldname: NAME DOT NAME •
+
+    $default  reduce using rule 19 (dottedfieldname)
+
+
+State 21
+
+   21 dottedfieldname: NAME DOT ASTERISK •
+
+    $default  reduce using rule 21 (dottedfieldname)
+
+
+State 22
+
+   17 aggname: AGGF ALIAS NAME •
+
+    $default  reduce using rule 17 (aggname)
+
+
+State 23
+
+    1 entire_clause: SELECT SPACE fieldlist SPACE FROM • SPACE tablelist whereclause
+
+    SPACE  shift, and go to state 27
+
+
+State 24
+
+    5 fieldlistnoagg: fieldlistnoagg COMMA fieldname •
+
+    $default  reduce using rule 5 (fieldlistnoagg)
+
+
+State 25
+
+    7 fieldlistagg: fieldlistagg COMMA aggname •
+
+    $default  reduce using rule 7 (fieldlistagg)
+
+
+State 26
+
+   15 fieldname: dottedfieldname ALIAS NAME •
+
+    $default  reduce using rule 15 (fieldname)
+
+
+State 27
+
+    1 entire_clause: SELECT SPACE fieldlist SPACE FROM SPACE • tablelist whereclause
+    8 tablelist: • tablename
+    9          | • tablelist COMMA tablename
+   10          | • tablelist JOIN tablename
+   11          | • tablelist JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+   12 tablename: • NAME
+   13          | • NAME ALIAS NAME
+
+    NAME  shift, and go to state 28
+
+    tablelist  go to state 29
+    tablename  go to state 30
+
+
+State 28
+
+   12 tablename: NAME •  [$end, COMMA, SPACE, CP, SEMICOLON, JOIN, ON]
+   13          | NAME • ALIAS NAME
+
+    ALIAS  shift, and go to state 31
+
+    $default  reduce using rule 12 (tablename)
+
+
+State 29
+
+    1 entire_clause: SELECT SPACE fieldlist SPACE FROM SPACE tablelist • whereclause
+    9 tablelist: tablelist • COMMA tablename
+   10          | tablelist • JOIN tablename
+   11          | tablelist • JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+   22 whereclause: ε •  [$end]
+   23            | • SEMICOLON
+   24            | • SPACE WHERE SPACE conditions
+   25            | • SPACE WHERE SPACE conditions SEMICOLON
+
+    COMMA      shift, and go to state 32
+    SPACE      shift, and go to state 33
+    SEMICOLON  shift, and go to state 34
+    JOIN       shift, and go to state 35
+
+    $default  reduce using rule 22 (whereclause)
+
+    whereclause  go to state 36
+
+
+State 30
+
+    8 tablelist: tablename •
+
+    $default  reduce using rule 8 (tablelist)
+
+
+State 31
+
+   13 tablename: NAME ALIAS • NAME
+
+    NAME  shift, and go to state 37
+
+
+State 32
+
+    9 tablelist: tablelist COMMA • tablename
+   12 tablename: • NAME
+   13          | • NAME ALIAS NAME
+
+    NAME  shift, and go to state 28
+
+    tablename  go to state 38
+
+
+State 33
+
+   24 whereclause: SPACE • WHERE SPACE conditions
+   25            | SPACE • WHERE SPACE conditions SEMICOLON
+
+    WHERE  shift, and go to state 39
+
+
+State 34
+
+   23 whereclause: SEMICOLON •
+
+    $default  reduce using rule 23 (whereclause)
+
+
+State 35
+
+   10 tablelist: tablelist JOIN • tablename
+   11          | tablelist JOIN • tablename ON dottedfieldname completeoperator dottedfieldname
+   12 tablename: • NAME
+   13          | • NAME ALIAS NAME
+
+    NAME  shift, and go to state 28
+
+    tablename  go to state 40
+
+
+State 36
+
+    1 entire_clause: SELECT SPACE fieldlist SPACE FROM SPACE tablelist whereclause •
+
+    $default  reduce using rule 1 (entire_clause)
+
+
+State 37
+
+   13 tablename: NAME ALIAS NAME •
+
+    $default  reduce using rule 13 (tablename)
+
+
+State 38
+
+    9 tablelist: tablelist COMMA tablename •
+
+    $default  reduce using rule 9 (tablelist)
+
+
+State 39
+
+   24 whereclause: SPACE WHERE • SPACE conditions
+   25            | SPACE WHERE • SPACE conditions SEMICOLON
+
+    SPACE  shift, and go to state 41
+
+
+State 40
+
+   10 tablelist: tablelist JOIN tablename •  [$end, COMMA, SPACE, CP, SEMICOLON, JOIN]
+   11          | tablelist JOIN tablename • ON dottedfieldname completeoperator dottedfieldname
+
+    ON  shift, and go to state 42
+
+    $default  reduce using rule 10 (tablelist)
+
+
+State 41
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   24 whereclause: SPACE WHERE SPACE • conditions
+   25            | SPACE WHERE SPACE • conditions SEMICOLON
+   26 conditions: • conditions SPACE OR SPACE OP conditions CP
+   27           | • conditions SPACE AND SPACE OP conditions CP
+   28           | • OP conditions CP
+   29           | • condition
+   30 condition: • dottedfieldname completeoperator NUMBER
+   31          | • dottedfieldname simpleoperator STRING
+   32          | • dottedfieldname simpleoperator BOOL
+   33          | • dottedfieldname completeoperator innerqueryagg
+   34          | • dottedfieldname inclusionoperator innerquerynoagg
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 43
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname  go to state 44
+    conditions       go to state 45
+    condition        go to state 46
+
+
+State 42
+
+   11 tablelist: tablelist JOIN tablename ON • dottedfieldname completeoperator dottedfieldname
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+
+    NAME      shift, and go to state 5
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname  go to state 47
+
+
+State 43
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   26 conditions: • conditions SPACE OR SPACE OP conditions CP
+   27           | • conditions SPACE AND SPACE OP conditions CP
+   28           | • OP conditions CP
+   28           | OP • conditions CP
+   29           | • condition
+   30 condition: • dottedfieldname completeoperator NUMBER
+   31          | • dottedfieldname simpleoperator STRING
+   32          | • dottedfieldname simpleoperator BOOL
+   33          | • dottedfieldname completeoperator innerqueryagg
+   34          | • dottedfieldname inclusionoperator innerquerynoagg
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 43
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname  go to state 44
+    conditions       go to state 48
+    condition        go to state 46
+
+
+State 44
+
+   30 condition: dottedfieldname • completeoperator NUMBER
+   31          | dottedfieldname • simpleoperator STRING
+   32          | dottedfieldname • simpleoperator BOOL
+   33          | dottedfieldname • completeoperator innerqueryagg
+   34          | dottedfieldname • inclusionoperator innerquerynoagg
+   35 completeoperator: • EQ
+   36                 | • GT
+   37                 | • LT
+   38                 | • GTE
+   39                 | • LTE
+   40                 | • NE
+   41 simpleoperator: • EQ
+   42               | • NE
+   43 inclusionoperator: • IN
+   44                  | • NOT IN
+
+    EQ   shift, and go to state 49
+    GT   shift, and go to state 50
+    LT   shift, and go to state 51
+    GTE  shift, and go to state 52
+    LTE  shift, and go to state 53
+    NE   shift, and go to state 54
+    NOT  shift, and go to state 55
+    IN   shift, and go to state 56
+
+    completeoperator   go to state 57
+    simpleoperator     go to state 58
+    inclusionoperator  go to state 59
+
+
+State 45
+
+   24 whereclause: SPACE WHERE SPACE conditions •  [$end]
+   25            | SPACE WHERE SPACE conditions • SEMICOLON
+   26 conditions: conditions • SPACE OR SPACE OP conditions CP
+   27           | conditions • SPACE AND SPACE OP conditions CP
+
+    SPACE      shift, and go to state 60
+    SEMICOLON  shift, and go to state 61
+
+    $default  reduce using rule 24 (whereclause)
+
+
+State 46
+
+   29 conditions: condition •
+
+    $default  reduce using rule 29 (conditions)
+
+
+State 47
+
+   11 tablelist: tablelist JOIN tablename ON dottedfieldname • completeoperator dottedfieldname
+   35 completeoperator: • EQ
+   36                 | • GT
+   37                 | • LT
+   38                 | • GTE
+   39                 | • LTE
+   40                 | • NE
+
+    EQ   shift, and go to state 62
+    GT   shift, and go to state 50
+    LT   shift, and go to state 51
+    GTE  shift, and go to state 52
+    LTE  shift, and go to state 53
+    NE   shift, and go to state 63
+
+    completeoperator  go to state 64
+
+
+State 48
+
+   26 conditions: conditions • SPACE OR SPACE OP conditions CP
+   27           | conditions • SPACE AND SPACE OP conditions CP
+   28           | OP conditions • CP
+
+    SPACE  shift, and go to state 60
+    CP     shift, and go to state 65
+
+
+State 49
+
+   35 completeoperator: EQ •  [OP, NUMBER]
+   41 simpleoperator: EQ •  [BOOL, STRING]
+
+    BOOL      reduce using rule 41 (simpleoperator)
+    STRING    reduce using rule 41 (simpleoperator)
+    $default  reduce using rule 35 (completeoperator)
+
+
+State 50
+
+   36 completeoperator: GT •
+
+    $default  reduce using rule 36 (completeoperator)
+
+
+State 51
+
+   37 completeoperator: LT •
+
+    $default  reduce using rule 37 (completeoperator)
+
+
+State 52
+
+   38 completeoperator: GTE •
+
+    $default  reduce using rule 38 (completeoperator)
+
+
+State 53
+
+   39 completeoperator: LTE •
+
+    $default  reduce using rule 39 (completeoperator)
+
+
+State 54
+
+   40 completeoperator: NE •  [OP, NUMBER]
+   42 simpleoperator: NE •  [BOOL, STRING]
+
+    BOOL      reduce using rule 42 (simpleoperator)
+    STRING    reduce using rule 42 (simpleoperator)
+    $default  reduce using rule 40 (completeoperator)
+
+
+State 55
+
+   44 inclusionoperator: NOT • IN
+
+    IN  shift, and go to state 66
+
+
+State 56
+
+   43 inclusionoperator: IN •
+
+    $default  reduce using rule 43 (inclusionoperator)
+
+
+State 57
+
+   30 condition: dottedfieldname completeoperator • NUMBER
+   33          | dottedfieldname completeoperator • innerqueryagg
+   46 innerqueryagg: • OP SELECT SPACE aggname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    OP      shift, and go to state 67
+    NUMBER  shift, and go to state 68
+
+    innerqueryagg  go to state 69
+
+
+State 58
+
+   31 condition: dottedfieldname simpleoperator • STRING
+   32          | dottedfieldname simpleoperator • BOOL
+
+    BOOL    shift, and go to state 70
+    STRING  shift, and go to state 71
+
+
+State 59
+
+   34 condition: dottedfieldname inclusionoperator • innerquerynoagg
+   45 innerquerynoagg: • OP SELECT SPACE fieldname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    OP  shift, and go to state 72
+
+    innerquerynoagg  go to state 73
+
+
+State 60
+
+   26 conditions: conditions SPACE • OR SPACE OP conditions CP
+   27           | conditions SPACE • AND SPACE OP conditions CP
+
+    OR   shift, and go to state 74
+    AND  shift, and go to state 75
+
+
+State 61
+
+   25 whereclause: SPACE WHERE SPACE conditions SEMICOLON •
+
+    $default  reduce using rule 25 (whereclause)
+
+
+State 62
+
+   35 completeoperator: EQ •
+
+    $default  reduce using rule 35 (completeoperator)
+
+
+State 63
+
+   40 completeoperator: NE •
+
+    $default  reduce using rule 40 (completeoperator)
+
+
+State 64
+
+   11 tablelist: tablelist JOIN tablename ON dottedfieldname completeoperator • dottedfieldname
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+
+    NAME      shift, and go to state 5
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname  go to state 76
+
+
+State 65
+
+   28 conditions: OP conditions CP •
+
+    $default  reduce using rule 28 (conditions)
+
+
+State 66
+
+   44 inclusionoperator: NOT IN •
+
+    $default  reduce using rule 44 (inclusionoperator)
+
+
+State 67
+
+   46 innerqueryagg: OP • SELECT SPACE aggname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    SELECT  shift, and go to state 77
+
+
+State 68
+
+   30 condition: dottedfieldname completeoperator NUMBER •
+
+    $default  reduce using rule 30 (condition)
+
+
+State 69
+
+   33 condition: dottedfieldname completeoperator innerqueryagg •
+
+    $default  reduce using rule 33 (condition)
+
+
+State 70
+
+   32 condition: dottedfieldname simpleoperator BOOL •
+
+    $default  reduce using rule 32 (condition)
+
+
+State 71
+
+   31 condition: dottedfieldname simpleoperator STRING •
+
+    $default  reduce using rule 31 (condition)
+
+
+State 72
+
+   45 innerquerynoagg: OP • SELECT SPACE fieldname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    SELECT  shift, and go to state 78
+
+
+State 73
+
+   34 condition: dottedfieldname inclusionoperator innerquerynoagg •
+
+    $default  reduce using rule 34 (condition)
+
+
+State 74
+
+   26 conditions: conditions SPACE OR • SPACE OP conditions CP
+
+    SPACE  shift, and go to state 79
+
+
+State 75
+
+   27 conditions: conditions SPACE AND • SPACE OP conditions CP
+
+    SPACE  shift, and go to state 80
+
+
+State 76
+
+   11 tablelist: tablelist JOIN tablename ON dottedfieldname completeoperator dottedfieldname •
+
+    $default  reduce using rule 11 (tablelist)
+
+
+State 77
+
+   46 innerqueryagg: OP SELECT • SPACE aggname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    SPACE  shift, and go to state 81
+
+
+State 78
+
+   45 innerquerynoagg: OP SELECT • SPACE fieldname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    SPACE  shift, and go to state 82
+
+
+State 79
+
+   26 conditions: conditions SPACE OR SPACE • OP conditions CP
+
+    OP  shift, and go to state 83
+
+
+State 80
+
+   27 conditions: conditions SPACE AND SPACE • OP conditions CP
+
+    OP  shift, and go to state 84
+
+
+State 81
+
+   16 aggname: • AGGF
+   17        | • AGGF ALIAS NAME
+   46 innerqueryagg: OP SELECT SPACE • aggname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    AGGF  shift, and go to state 7
+
+    aggname  go to state 85
+
+
+State 82
+
+   14 fieldname: • dottedfieldname
+   15          | • dottedfieldname ALIAS NAME
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   45 innerquerynoagg: OP SELECT SPACE • fieldname SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    NAME      shift, and go to state 5
+    ASTERISK  shift, and go to state 6
+
+    fieldname        go to state 86
+    dottedfieldname  go to state 13
+
+
+State 83
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   26 conditions: • conditions SPACE OR SPACE OP conditions CP
+   26           | conditions SPACE OR SPACE OP • conditions CP
+   27           | • conditions SPACE AND SPACE OP conditions CP
+   28           | • OP conditions CP
+   29           | • condition
+   30 condition: • dottedfieldname completeoperator NUMBER
+   31          | • dottedfieldname simpleoperator STRING
+   32          | • dottedfieldname simpleoperator BOOL
+   33          | • dottedfieldname completeoperator innerqueryagg
+   34          | • dottedfieldname inclusionoperator innerquerynoagg
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 43
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname  go to state 44
+    conditions       go to state 87
+    condition        go to state 46
+
+
+State 84
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   26 conditions: • conditions SPACE OR SPACE OP conditions CP
+   27           | • conditions SPACE AND SPACE OP conditions CP
+   27           | conditions SPACE AND SPACE OP • conditions CP
+   28           | • OP conditions CP
+   29           | • condition
+   30 condition: • dottedfieldname completeoperator NUMBER
+   31          | • dottedfieldname simpleoperator STRING
+   32          | • dottedfieldname simpleoperator BOOL
+   33          | • dottedfieldname completeoperator innerqueryagg
+   34          | • dottedfieldname inclusionoperator innerquerynoagg
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 43
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname  go to state 44
+    conditions       go to state 88
+    condition        go to state 46
+
+
+State 85
+
+   46 innerqueryagg: OP SELECT SPACE aggname • SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    SPACE  shift, and go to state 89
+
+
+State 86
+
+   45 innerquerynoagg: OP SELECT SPACE fieldname • SPACE FROM SPACE tablelist innerquerywhereclause CP
+
+    SPACE  shift, and go to state 90
+
+
+State 87
+
+   26 conditions: conditions • SPACE OR SPACE OP conditions CP
+   26           | conditions SPACE OR SPACE OP conditions • CP
+   27           | conditions • SPACE AND SPACE OP conditions CP
+
+    SPACE  shift, and go to state 60
+    CP     shift, and go to state 91
+
+
+State 88
+
+   26 conditions: conditions • SPACE OR SPACE OP conditions CP
+   27           | conditions • SPACE AND SPACE OP conditions CP
+   27           | conditions SPACE AND SPACE OP conditions • CP
+
+    SPACE  shift, and go to state 60
+    CP     shift, and go to state 92
+
+
+State 89
+
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE • FROM SPACE tablelist innerquerywhereclause CP
+
+    FROM  shift, and go to state 93
+
+
+State 90
+
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE • FROM SPACE tablelist innerquerywhereclause CP
+
+    FROM  shift, and go to state 94
+
+
+State 91
+
+   26 conditions: conditions SPACE OR SPACE OP conditions CP •
+
+    $default  reduce using rule 26 (conditions)
+
+
+State 92
+
+   27 conditions: conditions SPACE AND SPACE OP conditions CP •
+
+    $default  reduce using rule 27 (conditions)
+
+
+State 93
+
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE FROM • SPACE tablelist innerquerywhereclause CP
+
+    SPACE  shift, and go to state 95
+
+
+State 94
+
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE FROM • SPACE tablelist innerquerywhereclause CP
+
+    SPACE  shift, and go to state 96
+
+
+State 95
+
+    8 tablelist: • tablename
+    9          | • tablelist COMMA tablename
+   10          | • tablelist JOIN tablename
+   11          | • tablelist JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+   12 tablename: • NAME
+   13          | • NAME ALIAS NAME
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE FROM SPACE • tablelist innerquerywhereclause CP
+
+    NAME  shift, and go to state 28
+
+    tablelist  go to state 97
+    tablename  go to state 30
+
+
+State 96
+
+    8 tablelist: • tablename
+    9          | • tablelist COMMA tablename
+   10          | • tablelist JOIN tablename
+   11          | • tablelist JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+   12 tablename: • NAME
+   13          | • NAME ALIAS NAME
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE FROM SPACE • tablelist innerquerywhereclause CP
+
+    NAME  shift, and go to state 28
+
+    tablelist  go to state 98
+    tablename  go to state 30
+
+
+State 97
+
+    9 tablelist: tablelist • COMMA tablename
+   10          | tablelist • JOIN tablename
+   11          | tablelist • JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE FROM SPACE tablelist • innerquerywhereclause CP
+   47 innerquerywhereclause: ε •  [CP]
+   48                      | • SPACE WHERE SPACE innerqueryconditions
+
+    COMMA  shift, and go to state 32
+    SPACE  shift, and go to state 99
+    JOIN   shift, and go to state 35
+
+    $default  reduce using rule 47 (innerquerywhereclause)
+
+    innerquerywhereclause  go to state 100
+
+
+State 98
+
+    9 tablelist: tablelist • COMMA tablename
+   10          | tablelist • JOIN tablename
+   11          | tablelist • JOIN tablename ON dottedfieldname completeoperator dottedfieldname
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE FROM SPACE tablelist • innerquerywhereclause CP
+   47 innerquerywhereclause: ε •  [CP]
+   48                      | • SPACE WHERE SPACE innerqueryconditions
+
+    COMMA  shift, and go to state 32
+    SPACE  shift, and go to state 99
+    JOIN   shift, and go to state 35
+
+    $default  reduce using rule 47 (innerquerywhereclause)
+
+    innerquerywhereclause  go to state 101
+
+
+State 99
+
+   48 innerquerywhereclause: SPACE • WHERE SPACE innerqueryconditions
+
+    WHERE  shift, and go to state 102
+
+
+State 100
+
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE FROM SPACE tablelist innerquerywhereclause • CP
+
+    CP  shift, and go to state 103
+
+
+State 101
+
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE FROM SPACE tablelist innerquerywhereclause • CP
+
+    CP  shift, and go to state 104
+
+
+State 102
+
+   48 innerquerywhereclause: SPACE WHERE • SPACE innerqueryconditions
+
+    SPACE  shift, and go to state 105
+
+
+State 103
+
+   46 innerqueryagg: OP SELECT SPACE aggname SPACE FROM SPACE tablelist innerquerywhereclause CP •
+
+    $default  reduce using rule 46 (innerqueryagg)
+
+
+State 104
+
+   45 innerquerynoagg: OP SELECT SPACE fieldname SPACE FROM SPACE tablelist innerquerywhereclause CP •
+
+    $default  reduce using rule 45 (innerquerynoagg)
+
+
+State 105
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   48 innerquerywhereclause: SPACE WHERE SPACE • innerqueryconditions
+   49 innerqueryconditions: • innerqueryconditions SPACE OR SPACE OP innerqueryconditions CP
+   50                     | • innerqueryconditions SPACE AND SPACE OP innerqueryconditions CP
+   51                     | • OP innerqueryconditions CP
+   52                     | • innerquerycondition
+   53 innerquerycondition: • dottedfieldname completeoperator NUMBER
+   54                    | • dottedfieldname simpleoperator STRING
+   55                    | • dottedfieldname simpleoperator BOOL
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 106
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname       go to state 107
+    innerqueryconditions  go to state 108
+    innerquerycondition   go to state 109
+
+
+State 106
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   49 innerqueryconditions: • innerqueryconditions SPACE OR SPACE OP innerqueryconditions CP
+   50                     | • innerqueryconditions SPACE AND SPACE OP innerqueryconditions CP
+   51                     | • OP innerqueryconditions CP
+   51                     | OP • innerqueryconditions CP
+   52                     | • innerquerycondition
+   53 innerquerycondition: • dottedfieldname completeoperator NUMBER
+   54                    | • dottedfieldname simpleoperator STRING
+   55                    | • dottedfieldname simpleoperator BOOL
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 106
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname       go to state 107
+    innerqueryconditions  go to state 110
+    innerquerycondition   go to state 109
+
+
+State 107
+
+   35 completeoperator: • EQ
+   36                 | • GT
+   37                 | • LT
+   38                 | • GTE
+   39                 | • LTE
+   40                 | • NE
+   41 simpleoperator: • EQ
+   42               | • NE
+   53 innerquerycondition: dottedfieldname • completeoperator NUMBER
+   54                    | dottedfieldname • simpleoperator STRING
+   55                    | dottedfieldname • simpleoperator BOOL
+
+    EQ   shift, and go to state 49
+    GT   shift, and go to state 50
+    LT   shift, and go to state 51
+    GTE  shift, and go to state 52
+    LTE  shift, and go to state 53
+    NE   shift, and go to state 54
+
+    completeoperator  go to state 111
+    simpleoperator    go to state 112
+
+
+State 108
+
+   48 innerquerywhereclause: SPACE WHERE SPACE innerqueryconditions •  [CP]
+   49 innerqueryconditions: innerqueryconditions • SPACE OR SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions • SPACE AND SPACE OP innerqueryconditions CP
+
+    SPACE  shift, and go to state 113
+
+    $default  reduce using rule 48 (innerquerywhereclause)
+
+
+State 109
+
+   52 innerqueryconditions: innerquerycondition •
+
+    $default  reduce using rule 52 (innerqueryconditions)
+
+
+State 110
+
+   49 innerqueryconditions: innerqueryconditions • SPACE OR SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions • SPACE AND SPACE OP innerqueryconditions CP
+   51                     | OP innerqueryconditions • CP
+
+    SPACE  shift, and go to state 113
+    CP     shift, and go to state 114
+
+
+State 111
+
+   53 innerquerycondition: dottedfieldname completeoperator • NUMBER
+
+    NUMBER  shift, and go to state 115
+
+
+State 112
+
+   54 innerquerycondition: dottedfieldname simpleoperator • STRING
+   55                    | dottedfieldname simpleoperator • BOOL
+
+    BOOL    shift, and go to state 116
+    STRING  shift, and go to state 117
+
+
+State 113
+
+   49 innerqueryconditions: innerqueryconditions SPACE • OR SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions SPACE • AND SPACE OP innerqueryconditions CP
+
+    OR   shift, and go to state 118
+    AND  shift, and go to state 119
+
+
+State 114
+
+   51 innerqueryconditions: OP innerqueryconditions CP •
+
+    $default  reduce using rule 51 (innerqueryconditions)
+
+
+State 115
+
+   53 innerquerycondition: dottedfieldname completeoperator NUMBER •
+
+    $default  reduce using rule 53 (innerquerycondition)
+
+
+State 116
+
+   55 innerquerycondition: dottedfieldname simpleoperator BOOL •
+
+    $default  reduce using rule 55 (innerquerycondition)
+
+
+State 117
+
+   54 innerquerycondition: dottedfieldname simpleoperator STRING •
+
+    $default  reduce using rule 54 (innerquerycondition)
+
+
+State 118
+
+   49 innerqueryconditions: innerqueryconditions SPACE OR • SPACE OP innerqueryconditions CP
+
+    SPACE  shift, and go to state 120
+
+
+State 119
+
+   50 innerqueryconditions: innerqueryconditions SPACE AND • SPACE OP innerqueryconditions CP
+
+    SPACE  shift, and go to state 121
+
+
+State 120
+
+   49 innerqueryconditions: innerqueryconditions SPACE OR SPACE • OP innerqueryconditions CP
+
+    OP  shift, and go to state 122
+
+
+State 121
+
+   50 innerqueryconditions: innerqueryconditions SPACE AND SPACE • OP innerqueryconditions CP
+
+    OP  shift, and go to state 123
+
+
+State 122
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   49 innerqueryconditions: • innerqueryconditions SPACE OR SPACE OP innerqueryconditions CP
+   49                     | innerqueryconditions SPACE OR SPACE OP • innerqueryconditions CP
+   50                     | • innerqueryconditions SPACE AND SPACE OP innerqueryconditions CP
+   51                     | • OP innerqueryconditions CP
+   52                     | • innerquerycondition
+   53 innerquerycondition: • dottedfieldname completeoperator NUMBER
+   54                    | • dottedfieldname simpleoperator STRING
+   55                    | • dottedfieldname simpleoperator BOOL
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 106
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname       go to state 107
+    innerqueryconditions  go to state 124
+    innerquerycondition   go to state 109
+
+
+State 123
+
+   18 dottedfieldname: • NAME
+   19                | • NAME DOT NAME
+   20                | • ASTERISK
+   21                | • NAME DOT ASTERISK
+   49 innerqueryconditions: • innerqueryconditions SPACE OR SPACE OP innerqueryconditions CP
+   50                     | • innerqueryconditions SPACE AND SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions SPACE AND SPACE OP • innerqueryconditions CP
+   51                     | • OP innerqueryconditions CP
+   52                     | • innerquerycondition
+   53 innerquerycondition: • dottedfieldname completeoperator NUMBER
+   54                    | • dottedfieldname simpleoperator STRING
+   55                    | • dottedfieldname simpleoperator BOOL
+
+    NAME      shift, and go to state 5
+    OP        shift, and go to state 106
+    ASTERISK  shift, and go to state 6
+
+    dottedfieldname       go to state 107
+    innerqueryconditions  go to state 125
+    innerquerycondition   go to state 109
+
+
+State 124
+
+   49 innerqueryconditions: innerqueryconditions • SPACE OR SPACE OP innerqueryconditions CP
+   49                     | innerqueryconditions SPACE OR SPACE OP innerqueryconditions • CP
+   50                     | innerqueryconditions • SPACE AND SPACE OP innerqueryconditions CP
+
+    SPACE  shift, and go to state 113
+    CP     shift, and go to state 126
+
+
+State 125
+
+   49 innerqueryconditions: innerqueryconditions • SPACE OR SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions • SPACE AND SPACE OP innerqueryconditions CP
+   50                     | innerqueryconditions SPACE AND SPACE OP innerqueryconditions • CP
+
+    SPACE  shift, and go to state 113
+    CP     shift, and go to state 127
+
+
+State 126
+
+   49 innerqueryconditions: innerqueryconditions SPACE OR SPACE OP innerqueryconditions CP •
+
+    $default  reduce using rule 49 (innerqueryconditions)
+
+
+State 127
+
+   50 innerqueryconditions: innerqueryconditions SPACE AND SPACE OP innerqueryconditions CP •
+
+    $default  reduce using rule 50 (innerqueryconditions)

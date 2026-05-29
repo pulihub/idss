@@ -1,0 +1,13 @@
+<iDSSConf>
+  <Settings>
+    <Hostname>@HOST_NAME@</Hostname>
+    <SystemInfo_SD>@CMAKE_INSTALL_PREFIX@/info.d/systeminfo_sd</SystemInfo_SD>
+    <UserInfo_SD>@CMAKE_INSTALL_PREFIX@/info.d/server</UserInfo_SD>
+    <iNodeInfo_SD>@CMAKE_INSTALL_PREFIX@/info.d/inodeinfo_sd</iNodeInfo_SD>
+    <QueryTempFiles_SD>@CMAKE_INSTALL_PREFIX@/info.d/query_tempfiles</QueryTempFiles_SD>
+    <QueryResults_SD>@CMAKE_INSTALL_PREFIX@/info.d/query_results</QueryResults_SD>
+    <RegistrationPeriod>60</RegistrationPeriod>
+    <PurgePeriod>600</PurgePeriod>
+    <Sqlite_Db_Path>@CMAKE_INSTALL_PREFIX@/server/idss_db</Sqlite_Db_Path>
+  </Settings>
+</iDSSConf>

@@ -1,0 +1,18 @@
+<iDSSConf>
+  <Settings>
+    <Hostname>datadog.unisalento.it</Hostname>
+    <SystemInfo_SD
+        >/idss-cmake-based/simulation/idss-1/info.d/systeminfo_sd</SystemInfo_SD>
+    <UserInfo_SD>/idss-cmake-based/simulation/idss-1/info.d/server</UserInfo_SD>
+    <iNodeInfo_SD
+        >/idss-cmake-based/simulation/idss-1/info.d/inodeinfo_sd</iNodeInfo_SD>
+    <QueryTempFiles_SD
+        >/idss-cmake-based/simulation/idss-1/info.d/query_tempfiles</QueryTempFiles_SD>
+    <QueryResults_SD
+        >/idss-cmake-based/simulation/idss-1/info.d/query_results</QueryResults_SD>
+    <RegistrationPeriod>60</RegistrationPeriod>
+    <PurgePeriod>600</PurgePeriod>
+    <Sqlite_Db_Path
+        >/idss-cmake-based/simulation/idss-1/server/idss_db</Sqlite_Db_Path>
+  </Settings>
+</iDSSConf>

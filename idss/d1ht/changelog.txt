@@ -1,0 +1,164 @@
+                                
+10/09/2012, D1HT 0.1.2.1  Luiz Monnerat 
+ 
+ 	* The d1ht_t destructor now destroys the D1HT threads 
+ 	* Changes in the exit routines 
+ 	* Created the d1ht_t::wait_join() routine. The application should call
+ 	  this routine to make sure that it has correctly joined the D1HT
+ 	  system
+                                
+27/08/2012, D1HT 0.1.2.0, Luiz Monnerat and Anderson Borges da Silva
+ 
+ 	* New files d1ht.c, d1ht_h.h, d1ht_main_thread.c and d1ht_main_thread.h kindly created and
+ 	  provided by Anderson Silva. This new code allows D1HT to be linked in an application.
+ 	* As an example of the ability to link D1HT in an application, file
+ 	  main.c is now very simple (most of its code was moved to files d1ht.c and
+ 	  d1ht_main_thread.c) 
+        * Fixed bugs in the joinning mechanism
+        * New script D1HT_quick_test.sh to perform a quick D1HT test
+ 	* In order to avoid interfering in the application environment, we
+ 	  avoid blocking signals. We only block the SIGCONT signal, and only
+ 	  when the --routing_table parameter is used
+ 	* Routine stat_part_t::init (file stats.h) now checks if all stats are
+ 	  initialised           
+ 	
+
+                                
+13/06/2012, D1HT 0.1.1.2, Luiz Monnerat with contributions from Roberto Gonzales and Anderson Borges da Silva
+ 
+ 	* By suggestion of Anderson Silva, the files time.c and time.h were renamed to mtime.c and mtime.h
+ 	* Fixed a bug in the CONNECTION_TIMEO macro (messages.h)
+ 	* Changed the default TCP connection timeout value (D1HT_TCP_TIMEO in D1HT.h) to 2 seconds
+ 	* The SEND_HEADER_SEQNO, SEND_HEADER, SEND_BODY, SEND_MSG_SEQNO,SEND_MSG, READ_MSG,
+ 	  READ_BODY, etc, will not anymore close the socket in the case of errors, which should
+ 	  be done by the caller 
+ 	* Swapped "Cause" and "message" in the PTXEQ and XEQ_EXEC macros (debug.h), which may
+ 	  affect those who were analyzing message errors.
+ 	* D1HT will reply with a D1HT_LEAVE type message (instead of an ack) to messages received
+ 	  while exiting
+ 	* New parameter -E (or --use_etc_IP) that forces D1HT to read the IP
+ 	  address (or host name) from /etc/D1HT.IPaddr
+ 	* Statistics stat_look* and stat_Look are now only computed in routine
+ 	  routing_table::lookup (file lookup.c), which means that they will
+ 	  also consider the lookups associated with joins and route requests
+ 	* New routine print_counter_str (files stats.h and stats.c)        
+ 	* D1HStats program now generates stats to an output file based on the input file name
+          (by appending ".stats.txt" on the input file name. This may affect scripts that 
+          treats D1HStats outputs
+ 	* New program D1HStat_compare, which compares stats from two different
+ 	  D1HT runs        
+ 	* Using code provided by Anderson Silva, we defined a d1ht namespace
+ 	* Using code provided by Roberto Gonzales, we defined several macros named
+ 	  D1HT_* that we will easy the use of D1HT for the development of
+ 	  preloaded filesystems
+ 	* The D1HT_CLOSE msg type, which was not used, was removed (file
+ 	  messages.h). Now the D1HT_CLOSE macro refers to the close routine,
+	  as defined above
+ 	* Functions my_terminate and BigEndian were moved to common.c and
+ 	  included in extern.h
+ 	* D1HWrap and D1HT with DEBUG flag on will neither dump nor print statistics 
+ 	* D1HWrap and D1HT will only print statistics if the -S parameter is used
+ 	* D1HT (file main.c) is not fclosing stdout anymore
+ 	* D1HT (file exit.c) is not fclosing stderr anymore when exiting
+         
+                                
+06/02/2012, D1HT 0.1.1.1, Luiz Monnerat                                         
+ 
+ 	* Fixed bugs in the D1HT_local.sh script
+ 	* Makefile defaults to not using the -DDEBUG flag
+                             
+02/04/2011, D1HT 0.1.1.0, Luiz Monnerat                                         
+ 
+ 	* Renamed pthread.h and pthread_debug.h to threads.h and threads_debug.h 
+ 	  to avoid conflicts with system include files
+ 	* We now avoid closing connections inside D1HT_succ, D1HT_lookup
+ 	  and D1HT_route. When these routines return an error and
+ 	  errno != EINVAL, the application should typically close the 
+ 	  connection through D1HT_close, and start a new connection by 
+ 	  calling D1HT_connect
+ 	* Fixed a bug in close_interval.c  
+ 	* Fixed a bug in interval.c  
+ 	* Fixed a bug in the pub_send routine (file join.c)
+ 	* Fixed a bug in the PTHREAD_TEST_CREATE macro
+ 	* Fixed a bug in the probe_and_propagate routine (file probe.c)
+ 	* Fixed a bug that was preventing D1HWrap to finish in some cases
+ 	* Fixed a bug in the lookup.c (Thanks to Anderson B. Silva!)
+ 	* Fixed a bug that was preventing D1HWrap to set the appropriate average session length
+ 	* Fixed the secs_real stats
+ 	* In order to avoid contention for the rt_mutex lock, the pub_send routine (file join.c) will 
+ 	  create a copy of routing table to send to the joining peer, whenever it can save more
+ 	  70% of the RT lockin time.
+ 	* Minor changes in the way D1HWrap get the stats
+ 	* Improved and simplified the signal handlers (files signal.c and D1HWrap_signal.c)
+ 	* Removed the stat_session_length,  stat_sessions and stat_max_E stats
+ 	* Removed some unused code
+ 	* Fused the EXIT and EXITn macros
+ 	* Rename the should_close_SIGALRM routine to should_close 
+ 	* Fixed the sleep time in the theta_interval pthread (file time.c)
+ 	* Changed should_close in order to avoid exceeding the MTU size for maintenance msgs
+	* Change the term pid (when it was used to mean pthread id, but in other
+	  programs is used to mean process id) to tid (i.e., thread id)
+ 	* New script D1HT_local.sh that runs an experiment with all peers in the 
+ 	  local machine, and generates its statistics and a summary of errors
+ 	* New script D1HT_xeq.sh that prints a summary of errors and warnings of
+ 	  D1HT and D1HWrap sysouts in the current working directory 
+	* Several changes and improvements in ERROR and WARNING messages
+	* Other minor changes and bug fixes              
+
+                             
+10/Dec/2010, D1HT 0.1.0.4, Luiz Monnerat                                         
+ 
+ 	* Minor changes in the rtt and rto calculation (which now are in microseconds)
+ 	* Minor changes in the UDP retransmission loops
+ 	* We now send NACKS when receiveing a partial UDP message
+ 	* Changes in the LOCK initialization mechanisms
+ 	* New API routine D1HT_succ, which allows the application to get the successor of a given peer
+ 	* TCP connections now timeout according to D1HT_TCP_TIMEO
+ 	* Several other changes in messages.h
+ 	* Changed the D1HT_ROUTE/D1HT_LOOKUP_EXTERN/D1HT_SUCC processing in TCP_server.c
+ 	* Fixed a bug in the D1HT_ROUTE (Thanks to Anderson B. Silva!)
+ 	* Several others minor changes and bug fixes
+                             
+                             
+30/Jun/2010, D1HT 0.1.0.3, Luiz Monnerat                                         
+ 
+ 	* Fixed a bug in the lookup routine (file lookup.c)
+ 	* Changed the PE and PXEQ debugging macros (file debug.h) 
+                             
+                             
+08/Jun/2010, D1HT 0.1.0.2, Luiz Monnerat                                         
+ 
+ 	* Stats are generated as "dump" binary files
+ 	* D1HStats program prints consolidated stats from concatenated "dump" files
+ 	* As a step towards the API proposed by Dabek et al in IPTPS 2003, I 
+ 	  implemented the D1HT_route routine
+ 	* user_application.c is an example of D1HT_route use
+ 	* removed the HTTP (useless) server
+ 	* several other fixes and changes
+ 	
+                              
+14/Apr/2010, D1HT 0.1.0.1, Luiz Monnerat                                         
+ 
+ 	* Fixed a problem with macro PTHREAD_DETACH
+ 	                       
+ 
+30/Nov/2009, D1HT 0.1.0.0, Luiz Monnerat                                                                        
+    
+    * Initial Version          
+    * Documentation: L. Monnerat and C. Amorim, Peer-to-Peer Single Hop     
+                 Distributed Hash Tables, in Proceedings of the IEEE    
+                 Global Communications Conference (GLOBECOM), Nov/2009. 
+                 Available from http://www.cos.ufrj.br/~monnerat        
+                                                                        
+  	* The msg headers implemented are slightly different (and      
+	  bigger) than the ones used in the experiments presented in the        
+	  GLOBECOM 2009 paper. This is because we included a 4 bytes “systemid” 
+	  field in the message headers presented in Figures 1.a and 1.b of      
+	  the GLOBECOM paper, and so all messages will have 4 more bytes (these 
+	  4 bytes should be added to all D1HT, CALOT and OneHop msgs, including 
+	  acks). This was done because in some tests that we made after         
+	  uploading the final paper version, we observed that when              
+	  running 2 distinct D1HT and/or CALOT  peers in the same node, a peer  
+	  from one system could (by mistake or software bug) send a msg to the  
+	  peer of the other system, which would pollute both peers Routing      
+	  Tables.                                                               

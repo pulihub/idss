@@ -1,0 +1,8 @@
+iDSS Information System v1.7.1 Public Release
+
+Project: InnoCyPES
+Authors: University of Salento, Italy
+
+The InnoCyPES iDSS has been designed as a distributed relational data Service for discovering and monitoring information.
+
+The GRelC technology (Grid Relational Catalog) provides a set of primitives to directly establish and manage a connection with data sources.

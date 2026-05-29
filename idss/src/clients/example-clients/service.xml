@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<HOSTS xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.innocypes.eu/WorkPackages/wp-2/Software/idss_schema.xsd">
+  <HOST name="gridsurfer.unisalento.it" domain_name="unisalento.it">
+    <SERVICES>
+      <SERVICE name="test">
+        <ACCESS_URLS>
+          <ACCESS_URL url="tt://gridsurfer.unisalento.it:6/" publisher="/O=Grid/OU=unisalento.it/OU=HPCLab/CN=Massimo Cafaro" created_at="1095328171" valid_for="4294967295"/>
+          <ACCESS_URL url="tt://gridsurfer.unisalento.it:6/" publisher="/O=Grid/OU=unisalento.it/OU=HPCLab/CN=Massimo Cafaro" created_at="1095328171" valid_for="4294967295"/>
+          <ACCESS_URL url="tt://gridsurfer.unisalento.it:6/" publisher="/O=Grid/OU=unisalento.it/OU=HPCLab/CN=Massimo Cafaro" created_at="1095328171" valid_for="4294967295"/>
+        </ACCESS_URLS>
+        <description>dd</description>
+        <keywords>ff</keywords>
+        <def_port>4</def_port>
+      </SERVICE>
+    </SERVICES>
+  </HOST>
+</HOSTS>

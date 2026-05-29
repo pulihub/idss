@@ -1,0 +1,15 @@
+ReadMe
+======
+
+
+Modifiche apportate a D1HT per favorire l'estensione ad IDSS:
+
+* inserimento di 2 nuovi messaggi: D1HT_QUERY REQUEST/REPLY
+* commentato in *RT_other.c* la **#ifdef (DEBUG)** nel metodo print_table per attivare il dump della routing table
+* modifica del TCP handler per la gestione dei due nuovi messaggi (2 nuovi case dello swith message.type)
+* definizione delle classi necessarie a gestire le query distribuite
+* aggiornato il fiel *extern.c* per la definizione della var globale QueryManager
+* aggiunta di un file per la conversione da messaggi D1HT a struct query req/reply
+* modificato file *include.h*
+* modificato il *Makefile*
+* modificato *base.h* per STL libraries: aggiunta **<map>**

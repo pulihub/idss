@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xsd:element name="Recordset">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" ref="Schema"/>
+        <xsd:element maxOccurs="unbounded" ref="Records"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Schema">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" ref="field"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="field">
+   <xsd:complexType>
+      <xsd:attribute name="name" use="required" type="xsd:string"/>
+      <xsd:attribute name="id" use="required" type="xsd:string"/>
+      <xsd:attribute name="type" use="required" type="xsd:string"/>
+   </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Records">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" ref="record"/>
+      </xsd:sequence>
+      <xsd:attribute name="numrecord" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="record">
+    <xsd:complexType>
+      <xsd:attribute name="field" use="required" type="xsd:string"/>
+      <xsd:attribute name="value" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
