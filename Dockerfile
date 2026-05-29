@@ -35,10 +35,10 @@ COPY --from=build /usr/local/info.d /usr/local/info.d
 COPY --from=build /usr/local/lib /usr/local/lib
 COPY --from=build /etc/idss_conf.xml /etc/idss_conf.xml
 COPY --from=build /idss/schema/create_schema_p2p.sql /schema/create_schema_p2p.sql
-COPY --from=build /idss/cert/server.pem /usr/local/server/server.pem
-COPY --from=build /idss/cert/cacert.pem /usr/local/server/cacert.pem
-COPY --from=build /idss/cert/client.pem /usr/local/bin/client.pem
-COPY --from=build /idss/cert/cacert.pem /usr/local/bin/cacert.pem
+#COPY --from=build /idss/cert/server.pem /usr/local/server/server.pem
+#COPY --from=build /idss/cert/cacert.pem /usr/local/server/cacert.pem
+#COPY --from=build /idss/cert/client.pem /usr/local/bin/client.pem
+#COPY --from=build /idss/cert/cacert.pem /usr/local/bin/cacert.pem
 COPY --from=build /idss/utils/startup.sh /
 COPY --from=build /idss/utils/datagen.py /
 
