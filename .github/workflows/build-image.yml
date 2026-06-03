@@ -43,6 +43,6 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           context: .
-          push: false
+          push: true
           tags: ${{ github.actor }}/idss:latest 
       
