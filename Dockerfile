@@ -6,24 +6,29 @@ RUN apt-get update && apt-get install -y build-essential \
     cmake libxml2-dev libssl-dev libsqlite3-dev zlib1g-dev \
     lzma-dev libdb-dev libnsl-dev sqlite3 clang nano python3.12-venv unzip autoconf yacc flex libbison-dev
 
-COPY idss /idss
-
 # compile gsoap and integrate gsoap files in IDSS src code
 COPY gsoap-2.8 /gsoap-2.8
-#RUN <<EOF
-#cd /gsoap-2.8
-#./configure
-#make
-#make install exec_prefix=/gsoap_bin
-#cp /gsoap_bin/bin/soapcpp2 /idss/bin
-#chmod +x /idss/bin/soapcpp2
-#cp /gsoap-2.8/gsoap/stdsoap2.h /idss/include
-#cp /gsoap-2.8/gsoap/stdsoap2.c /idss/src/gsoap
-#cp /gsoap-2.8/gsoap/src/soapcpp2.c /idss/src/gsoap
-#EOF
 
-# # compile and install IDSS
-# RUN /idss/install.sh
+WORKDIR /gsoap-2.8
+RUN <<EOF
+./configure
+make
+make install exec_prefix=/gsoap_bin
+EOF
+
+COPY idss /idss
+
+RUN <<EOF
+cp /gsoap_bin/bin/soapcpp2 /idss/bin
+chmod +x /idss/bin/soapcpp2
+cp /gsoap-2.8/gsoap/stdsoap2.h /idss/include
+cp /gsoap-2.8/gsoap/stdsoap2.c /idss/src/gsoap
+cp /gsoap-2.8/gsoap/src/soapcpp2.c /idss/src/gsoap
+EOF
+
+# compile and install IDSS
+WORKDIR /idss 
+RUN ./install.sh
 
 # FROM ubuntu:noble AS idss
 # RUN apt-get update && apt-get install -y sqlite3 libxml2 libnsl2 python3 python3.12-venv
