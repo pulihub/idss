@@ -19,7 +19,7 @@ EOF
 COPY idss /idss
 
 RUN <<EOF
-cp /gsoap_bin/bin/soapcpp2 /idss/bin
+mkdir -p /idss/bin && cp /gsoap_bin/bin/soapcpp2 /idss/bin/soapcpp2
 chmod +x /idss/bin/soapcpp2
 cp /gsoap-2.8/gsoap/stdsoap2.h /idss/include
 cp /gsoap-2.8/gsoap/stdsoap2.c /idss/src/gsoap
@@ -27,8 +27,8 @@ cp /gsoap-2.8/gsoap/src/soapcpp2.c /idss/src/gsoap
 EOF
 
 # compile and install IDSS
-#WORKDIR /idss 
-#RUN ./install.sh
+WORKDIR /idss 
+RUN ./install.sh
 
 # FROM ubuntu:noble AS idss
 # RUN apt-get update && apt-get install -y sqlite3 libxml2 libnsl2 python3 python3.12-venv
