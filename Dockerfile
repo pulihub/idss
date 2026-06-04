@@ -28,7 +28,11 @@ EOF
 
 # compile and install IDSS
 WORKDIR /idss 
-RUN ./install.sh
+RUN <<EOF
+cmake -S /idss -B /idss/build -DCMAKE_BUILD_TYPE="Release" -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++;
+cmake --build build -v;
+cmake --install build -v;
+EOF
 
 # FROM ubuntu:noble AS idss
 # RUN apt-get update && apt-get install -y sqlite3 libxml2 libnsl2 python3 python3.12-venv
