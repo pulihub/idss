@@ -31,7 +31,7 @@ WORKDIR /idss
 RUN <<EOF
 cmake -S /idss -B /idss/build -DCMAKE_BUILD_TYPE="Release" -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++;
 cmake --build build -v;
-cmake --install build -v;
+#cmake --install build -v;
 EOF
 
 # FROM ubuntu:noble AS idss
