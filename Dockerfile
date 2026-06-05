@@ -37,11 +37,11 @@ mkdir -p info.d/query_tmpfiles;
 mkdir -p info.d/server;
 mkdir -p info.d/systeminfo_sd;
 cmake --install build -v;
-sqlite3 /usr/local/server/idss_db < /schema/create_schema_p2p.sql
+sqlite3 /usr/local/server/idss_db < /idss/schema/create_schema_p2p.sql
 EOF
 
 FROM ubuntu:noble AS idss
-RUN apt-get update && apt-get install -y libxml2 libnsl2
+RUN apt-get update && apt-get install -y libxml2 libnsl2 libsqlite3-0
 #python3 python3.12-venv
 
 # transfer install files from build image
@@ -56,6 +56,7 @@ COPY --from=build /idss/utils/startup.sh /
 #COPY --from=build /idss/cert/cacert.pem /usr/local/server/cacert.pem
 #COPY --from=build /idss/cert/client.pem /usr/local/bin/client.pem
 #COPY --from=build /idss/cert/cacert.pem /usr/local/bin/cacert.pem
+
 #COPY --from=build /idss/utils/datagen.py /
 
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
