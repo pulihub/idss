@@ -41,8 +41,7 @@ sqlite3 /usr/local/server/idss_db < /idss/schema/create_schema_p2p.sql
 EOF
 
 FROM ubuntu:noble AS idss
-RUN apt-get update && apt-get install -y libxml2 libnsl2 libsqlite3-0
-#python3 python3.12-venv
+RUN apt-get update && apt-get install -y libxml2 libnsl2 libsqlite3-0 python3 python3.12-venv
 
 # transfer install files from build image
 COPY --from=build /usr/local/server /usr/local/server
@@ -52,24 +51,19 @@ COPY --from=build /usr/local/lib /usr/local/lib
 COPY --from=build /etc/idss_conf.xml /etc/idss_conf.xml
 COPY --from=build /usr/local/server/idss_db /usr/local/server/idss_db
 COPY --from=build /idss/utils/startup.sh /
-#COPY --from=build /idss/cert/server.pem /usr/local/server/server.pem
-#COPY --from=build /idss/cert/cacert.pem /usr/local/server/cacert.pem
-#COPY --from=build /idss/cert/client.pem /usr/local/bin/client.pem
-#COPY --from=build /idss/cert/cacert.pem /usr/local/bin/cacert.pem
-
-#COPY --from=build /idss/utils/datagen.py /
+COPY --from=build /idss/utils/datagen.py /
 
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV IDSS_PORT=19000
 ENV IDSS_NR=10
 
-# RUN <<EOF
-# mkdir /pyenv;
-# python3 -m venv /pyenv;
-# EOF
+RUN <<EOF
+mkdir /pyenv;
+python3 -m venv /pyenv;
+EOF
 
-# ENV PATH="/pyenv/bin:$PATH"
+ENV PATH="/pyenv/bin:$PATH"
 
-# RUN pip3 install faker
+RUN pip3 install faker
 
-# ENTRYPOINT [ "/idss/utils/startup.sh" ]
+#ENTRYPOINT [ "/idss/utils/startup.sh" ]

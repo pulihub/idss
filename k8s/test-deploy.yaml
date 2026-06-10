@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: idss-bootstrap
+spec:
+  selector:
+    app: idssboot
+  ports:
+    - protocol: TCP
+      port: 19000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idssbootdpl
+  labels:
+    app: idssboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: idssboot
+  template:
+    metadata:
+      labels:
+        app: idssboot
+    spec:
+      setHostnameAsFQDN: true
+      containers:
+      - name: idssboot
+        image: ghcr.io/pulihub/idss:latest
+        command:
+          - sleep
+          - '3600'
+        ports:
+        - containerPort: 19000
+        env:
+        - name: IDSS_PORT
+          value: "19000"
+        - name: IDSS_NR
+          value: "10"
+        volumeMounts:
+        - name: cert
+          mountPath: "/certs"
+          readOnly: true
+      volumes:
+      - name: cert
+        secret:
+          secretName: idsscerts
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idssnodedpl
+  labels:
+    app: idssnode
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: idssnode
+  template:
+    metadata:
+      labels:
+        app: idssnode
+    spec:
+      setHostnameAsFQDN: true
+      containers:
+      - name: idssnode
+        image: ghcr.io/pulihub/idss:latest
+        command:
+          - sleep
+          - '3600'
+        ports:
+        - containerPort: 19000
+        volumeMounts:
+        - name: cert
+          mountPath: "/certs"
+          readOnly: true
+        env:
+        - name: IDSS_PORT
+          value: "19000"
+        - name: IDSS_NR
+          value: "10"
+        - name: IDSS_BOOTSTRAP_IP
+          value: "$(IDSS_BOOTSTRAP_SERVICE_HOST)"
+      volumes:
+      - name: cert
+        secret:
+          secretName: idsscerts
+
