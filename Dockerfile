@@ -66,4 +66,4 @@ ENV PATH="/pyenv/bin:$PATH"
 
 RUN pip3 install faker
 
-#ENTRYPOINT [ "/idss/utils/startup.sh" ]
+ENTRYPOINT [ "/startup.sh" ]

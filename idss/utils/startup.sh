@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sed -i "s/<Hostname>.*<\/Hostname>/<Hostname>$HOSTNAME<\/Hostname>/g" /etc/idss_conf.xml
+sed -i "s/<Hostname>.*<\/Hostname>/<Hostname>"$HOSTNAME.idss.local"<\/Hostname>/g" /etc/idss_conf.xml
 
 python /datagen.py $IDSS_NR;
 
