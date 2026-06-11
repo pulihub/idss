@@ -29,9 +29,7 @@ spec:
       containers:
       - name: idssboot
         image: ghcr.io/pulihub/idss:latest
-        command:
-          - sleep
-          - '3600'
+        imagePullPolicy: Always
         ports:
         - containerPort: 19000
         env:
@@ -68,9 +66,7 @@ spec:
       containers:
       - name: idssnode
         image: ghcr.io/pulihub/idss:latest
-        command:
-          - sleep
-          - '3600'
+        imagePullPolicy: Always
         ports:
         - containerPort: 19000
         volumeMounts:

@@ -4,6 +4,9 @@ sed -i "s/<Hostname>.*<\/Hostname>/<Hostname>"$HOSTNAME.idss.local"<\/Hostname>/
 
 python /datagen.py $IDSS_NR;
 
+cp /certs/* /usr/local/server
+cp /certs/* /usr/local/bin 
+
 P2P_PORT=`expr $IDSS_PORT + 1`
 
 cd /usr/local/server;
