@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootstrap-node
+  namespace: p2p-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bootstrap-node
+  template:
+    metadata:
+      labels:
+        app: bootstrap-node
+    spec:
+      # Nessun privilegio admin richiesto
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+      - name: p2p-bootstrap
+        image: your-registry/p2p-app:latest
+        args: ["--mode=bootstrap", "--port=4000"]
+        ports:
+        - containerPort: 4000
+          protocol: TCP
+        - containerPort: 4000
+          protocol: UDP
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"
+        env:
+        - name: NODE_ROLE
+          value: "bootstrap"
+        readinessProbe:
+          tcpSocket:
+            port: 4000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bootstrap-svc
+  namespace: p2p-test
+spec:
+  selector:
+    app: bootstrap-node
+  ports:
+  - name: tcp
+    port: 4000
+    protocol: TCP
+    targetPort: 4000
+  - name: udp
+    port: 4000
+    protocol: UDP
+    targetPort: 4000
+  clusterIP: None   # Headless: DNS diretto al pod, latenza minore

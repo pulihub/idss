@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bootpod
+  labels:
+    app: idssapp 
+spec:
+  containers:
+    - name: idss
+      image: ghcr.io/pulihub/idss:latest
+      imagePullPolicy: Always
+      env:
+        - name: IDSS_PORT
+          value: "19000"
+        - name: IDSS_NR
+          value: "10"
+      volumeMounts:
+        - name: cert
+          mountPath: "/certs"
+          readOnly: true
+  volumes:
+    - name: cert
+      secret:
+        secretName: idsscerts
+
