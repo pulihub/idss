@@ -41,7 +41,7 @@ sqlite3 /usr/local/server/idss_db < /idss/schema/create_schema_p2p.sql
 EOF
 
 FROM ubuntu:noble AS idss
-RUN apt-get update && apt-get install -y libxml2 libnsl2 libsqlite3-0 python3 python3.12-venv
+RUN apt-get update && apt-get install -y libxml2 libnsl2 libsqlite3-0 python3 python3.12-venv dnsutils
 
 # transfer install files from build image
 COPY --from=build /usr/local/server /usr/local/server

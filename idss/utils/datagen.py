@@ -9,6 +9,7 @@ import subprocess
 # import the sys module if you need - besides other things -
 # to process command line arguments
 import sys
+import os
 import time
 from sqlite3 import Error
 
@@ -70,8 +71,11 @@ def insertData(con, sql, params):
 
 def main():
     fake = Faker()
-    current_GMT = time.time()
-    Faker.seed(current_GMT)
+    if 'POD_NAME' in os.environ:
+        Faker.seed(abs(hash(os.environ.get('POD_NAME', 'idss'))))
+    else: 
+        current_GMT = time.time()
+        Faker.seed(current_GMT)
     numargs = len(sys.argv)
     if numargs == 2:
         records = int(sys.argv[1])
